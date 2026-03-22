@@ -1,0 +1,29 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Test / coverage
+coverage/
+.vitest/
+
+# Temp
+tmp/
+
+# Beads (local task tracking)
+.beads/
+
+# Claude local config (symlinks to personal dotfiles)
+.claude/settings.local.json
+.claude/skills/
+.claude/scripts/
+.claude/rules/testing-guidelines.md
