@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-22
+
 ### Added
 - `update` command — self-update by re-running install.sh from the repo root
+- Persist scan metadata and add staleness detection to status command
+
+### Fixed
+- Configure git identity in CI for test suite
 
 ## [0.1.0] - 2026-03-21
 
