@@ -60,7 +60,10 @@ program
 program
   .command("status [path]")
   .description("Show installed skills for a project")
-  .action((path?: string) => statusCommand(path));
+  .option("--json", "Output as JSON")
+  .action((path: string | undefined, opts: { json?: boolean }) =>
+    statusCommand(path, { json: opts.json }),
+  );
 
 // remove
 program
