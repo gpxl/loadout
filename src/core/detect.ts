@@ -185,7 +185,7 @@ export async function buildProjectContext(
 }
 
 /** Known manifest files to check for in exploratory context */
-const KNOWN_MANIFESTS = [
+export const KNOWN_MANIFESTS = [
   "package.json", "requirements.txt", "pyproject.toml", "setup.py", "setup.cfg",
   "Pipfile", "Cargo.toml", "go.mod", "Makefile", "CMakeLists.txt",
   "Gemfile", "composer.json", "build.gradle", "pom.xml", "build.sbt",

@@ -2,12 +2,44 @@ import { resolve } from "node:path";
 import chalk from "chalk";
 import { getInstalledSkills } from "../core/skills.js";
 import { detectProject } from "../core/detect.js";
+import { readScanMetadata, computeStaleness } from "../core/scan-state.js";
 import { log } from "../utils/log.js";
 
-export async function statusCommand(path?: string): Promise<void> {
+export async function statusCommand(path?: string, options: { json?: boolean } = {}): Promise<void> {
   const projectPath = resolve(path ?? process.cwd());
   const project = await detectProject(projectPath);
   const skills = await getInstalledSkills(projectPath);
+
+  // Read scan metadata for staleness
+  const scanMeta = await readScanMetadata(projectPath);
+  const stale = scanMeta ? await computeStaleness(projectPath, scanMeta) : null;
+
+  if (options.json) {
+    const projectSkills = skills.filter((s) => s.scope === "project");
+    const globalSkills = skills.filter((s) => s.scope === "global");
+
+    console.log(JSON.stringify({
+      project: {
+        path: projectPath,
+        name: project.name,
+        signals: project.signals,
+      },
+      skills: skills.map((s) => ({
+        name: s.name,
+        scope: s.scope,
+        description: s.description,
+      })),
+      summary: {
+        project: projectSkills.length,
+        global: globalSkills.length,
+      },
+      scan: {
+        lastScanAt: scanMeta?.lastScanAt ?? null,
+        stale: stale,
+      },
+    }, null, 2));
+    return;
+  }
 
   console.log();
   const s = project.signals;

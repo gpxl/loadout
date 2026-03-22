@@ -7,6 +7,7 @@ import { getRecommendations } from "../core/recommend.js";
 import { installSkillBatch, generateSkillRules } from "../core/skills.js";
 import { log, printInstallSummary } from "../utils/log.js";
 import { formatInstalls, getRiskColor } from "../utils/format.js";
+import { writeScanMetadata } from "../core/scan-state.js";
 import type { SkillSearchResult, RankedSkill, RelevanceTier } from "../types.js";
 
 const TIER_LABELS: Record<RelevanceTier, string> = {
@@ -118,6 +119,7 @@ export async function scanCommand(
         compatibilityNote: r.compatibilityNote ?? null,
       })),
     });
+    await writeScanMetadata(projectPath);
     return;
   }
 
@@ -162,6 +164,7 @@ export async function scanCommand(
     log.dim("Run loadout search <query> to explore more skills.");
   } else {
     log.success("No new skills to recommend — you're all set!");
+    await writeScanMetadata(projectPath);
   }
 }
 
@@ -292,6 +295,8 @@ async function installSelected(
     log.success("Updated .claude/rules/skills.md — Claude will use these skills automatically.");
     log.dim("Skills are active in your next Claude Code session.");
   }
+
+  await writeScanMetadata(opts.projectPath);
 }
 
 function writeJson(data: unknown): void {
